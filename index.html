@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aarakocra Ranger (Horizon Walker) — Level 3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --dark-brown:#3b2f2f;
+      --mid-brown:#6b4f3b;
+      --light-brown:#9b7a57;
+      --paper:#f5efe6;
+      --accent:#8b5a2b;
+      --glass: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--paper),#efe7dc);font-family:Roboto,system-ui,Arial;color:var(--dark-brown);}
+    .sheet{max-width:1100px;margin:20px auto;padding:20px;background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,0.12);border:6px solid var(--mid-brown)}
+    header{display:flex;gap:16px;align-items:center}
+    .portrait{width:116px;height:116px;border-radius:10px;background:linear-gradient(135deg,var(--mid-brown),var(--light-brown));display:flex;align-items:center;justify-content:center;color:var(--paper);font-family:Cinzel;font-size:18px}
+    h1{font-family:Cinzel;margin:0;font-size:22px;color:var(--dark-brown)}
+    .meta{margin-left:auto;text-align:right}
+    .meta small{display:block;color:rgba(59,47,47,0.8)}
+
+    .grid{display:grid;grid-template-columns: 1fr 360px;gap:18px;margin-top:18px}
+
+    /* left column */
+    .card{background:var(--paper);padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)}
+    .stats{display:flex;gap:8px;flex-wrap:wrap}
+    .ability{flex:1 1 30%;background:var(--glass);padding:8px;border-radius:8px;text-align:center}
+    .ability .score{font-size:20px;font-weight:700}
+    .ability .mod{font-size:14px;color:var(--dark-brown)}
+
+    .section-title{font-family:Cinzel;color:var(--accent);margin:6px 0 8px;font-size:14px}
+
+    .attacks table,.spells table{width:100%;border-collapse:collapse}
+    table td,table th{padding:6px;border-bottom:1px dashed rgba(0,0,0,0.06);vertical-align:middle}
+    .small{font-size:13px;color:rgba(0,0,0,0.6)}
+
+    /* right column */
+    .right-col{display:flex;flex-direction:column;gap:12px}
+    .features{height:100%}
+
+    /* responsive */
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr;}
+      .meta{text-align:left;margin-left:0}
+      .portrait{width:88px;height:88px}
+    }
+
+    /* mobile phone layout tweaks */
+    @media (max-width:420px){
+      .ability{flex:1 1 45%}
+      h1{font-size:18px}
+    }
+
+    /* buttons */
+    .controls{display:flex;gap:8px;margin-top:12px}
+    .btn{border:none;padding:8px 12px;border-radius:8px;background:var(--mid-brown);color:var(--paper);cursor:pointer;font-weight:600}
+    .btn.secondary{background:transparent;border:1px solid var(--mid-brown);color:var(--dark-brown)}
+    .muted{color:rgba(59,47,47,0.7);font-size:13px}
+
+    footer{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:12px}
+    .note{font-size:13px;color:rgba(0,0,0,0.6)}
+  </style>
+</head>
+<body>
+  <div class="sheet" id="sheet">
+    <header>
+      <div class="portrait">Aarakocra<br/>Ranger</div>
+      <div>
+        <h1 id="charName">Zephyros — Aarakocra Ranger (Horizon Walker) L3</h1>
+        <div class="muted">Longbow + Shortswords/Scimitars </div>
+      </div>
+      <div class="meta card">
+        <div><strong>Level</strong> <span id="level">3</span></div>
+        <small>Proficiency +2 • Spell DC <strong id="spellDC">12</strong></small>
+        <small>Spell Attack +<strong id="spellAtk">4</strong></small>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div class="section-title">Core</div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="flex:1">
+              <div><strong>HP</strong> <span id="hp">28</span></div>
+              <div class="small">AC <strong id="ac">16</strong> • Speed <strong id="speed">25 / 50 ft</strong></div>
+            </div>
+            <div style="width:200px">
+              <label class="small">Fighting Style</label>
+              <select id="fstyle" style="width:100%;padding:6px;border-radius:6px;border:1px solid rgba(0,0,0,0.08)">
+                <option value="archery">Archery (+2 ranged hit)</option>
+                <option value="two">Two-Weapon Fighting</option>
+              </select>
+            </div>
+          </div>
+
+          <hr/>
+          <div class="section-title">Abilities</div>
+          <div class="stats" id="abilities">
+            <div class="ability">
+              <div class="small">STR</div>
+              <div class="score" id="str">10</div>
+              <div class="mod" id="strMod">+0</div>
+            </div>
+            <div class="ability">
+              <div class="small">DEX</div>
+              <div class="score" id="dex">18</div>
+              <div class="mod" id="dexMod">+4</div>
+            </div>
+            <div class="ability">
+              <div class="small">CON</div>
+              <div class="score" id="con">14</div>
+              <div class="mod" id="conMod">+2</div>
+            </div>
+            <div class="ability">
+              <div class="small">INT</div>
+              <div class="score" id="int">10</div>
+              <div class="mod" id="intMod">+0</div>
+            </div>
+            <div class="ability">
+              <div class="small">WIS</div>
+              <div class="score" id="wis">15</div>
+              <div class="mod" id="wisMod">+2</div>
+            </div>
+            <div class="ability">
+              <div class="small">CHA</div>
+              <div class="score" id="cha">8</div>
+              <div class="mod" id="chaMod">-1</div>
+            </div>
+          </div>
+
+          <hr/>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div style="flex:1" class="small">
+              <div><strong>Saving Throws</strong></div>
+              <div>Str +2 • Dex <strong id="saveDex">+6</strong> • Con +2 • Int +0 • Wis <strong id="saveWis">+4</strong> • Cha -1</div>
+            </div>
+            <div style="width:220px">
+              <div class="small"><strong>Proficiency</strong> +<span id="prof">2</span></div>
+              <div class="small"><strong>AC</strong> <span id="ac2">16</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="section-title">Attacks &amp; Combat</div>
+          <div class="attacks">
+            <table>
+              <thead>
+                <tr><th>Weapon</th><th>To Hit</th><th>Damage</th><th class="small">Notes</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Longbow</td>
+                  <td><strong id="longToHit">+6</strong></td>
+                  <td><span id="longDmg">1d8 +4</span></td>
+                  <td class="small">Range 150/600 ft. Planar Warrior adds +1d8 force when used</td>
+                </tr>
+                <tr>
+                  <td>Shortsword (x2)</td>
+                  <td><strong id="shortToHit">+6</strong></td>
+                  <td><span id="shortDmg">1d6 +4</span></td>
+                  <td class="small">Use Two-Weapon Fighting for off-hand damage (if chosen)</td>
+                </tr>
+                <tr>
+                  <td>Talons (racial)</td>
+                  <td><strong>+6</strong></td>
+                  <td>1d4 +4</td>
+                  <td class="small">Natural weapon, finesse</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div class="small">Favored Foe (TCoE), Planar Warrior (bonus action, +1d8 force)</div>
+            <div>
+              <button class="btn" id="usePlanar">Use Planar Warrior </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="section-title">Spells</div>
+          <div class="spells small">
+            <table>
+              <tbody>
+                <tr><td><strong>Cure Wounds</strong></td><td>1st-level</td><td>Heal 1d8 + <span id="cureBonus">2</span></td></tr>
+                <tr><td><strong>Ensnaring Strike</strong></td><td>1st-level</td><td>Weapon attack, STR save or be restrained + damage</td></tr>
+                <tr><td><strong>Pass without Trace</strong></td><td>2nd-level</td><td>+10 to Stealth for you and allies (Concentration)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <aside class="right-col">
+        <div class="card features">
+          <div class="section-title">Features &amp; Details</div>
+          <div class="small">
+            <strong>Race:</strong> Aarakocra — 25 ft walking, 50 ft flying.<br/>
+            <strong>Subclass:</strong> Horizon Walker — Detect Portal, Planar Warrior.<br/>
+            <strong>Fighting Style:</strong> <span id="fstyleName">Archery</span>.<br/>
+            <strong>Skills:</strong> Perception +8 (expertise), Stealth +6, Survival +4.
+          </div>
+
+          <hr/>
+          <div class="section-title">Equipment</div>
+          <div class="small">Longbow, 20 arrows, 2x Shortswords/Scimitars, Studded Leather, Explorer's Pack, healer's kit </div>
+
+          <hr/>
+          <div class="section-title">Computed</div>
+          <div class="small">Spell Save DC: <strong id="computedDC">12</strong> • Spell Attack: <strong id="computedAtk">+4</strong></div>
+
+          <div class="controls">
+            <button class="btn" id="printBtn">Print / Export PDF</button>
+            <button class="btn secondary" id="downloadJSON">Download JSON</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Notes</div>
+          <div class="small"></div>
+        </div>
+
+      </aside>
+    </div>
+
+    
+  </div>
+
+  <script>
+    // Base data from the sheet provided
+    const data = {
+      name: 'Zephyros — Aarakocra Ranger (Horizon Walker) L3',
+      level: 3,
+      prof: 2,
+      hp: 28,
+      ac: 16,
+      speed: '25 / 50 ft',
+      abilities: { str:10,dex:18,con:14,int:10,wis:15,cha:8 },
+      profSkills: { perception:true, stealth:true, survival:true },
+      fightingStyle: 'archery'
+    };
+
+    // helpers
+    function modFor(score){ return Math.floor((score - 10)/2); }
+    function show(){
+      document.getElementById('charName').textContent = data.name;
+      document.getElementById('level').textContent = data.level;
+      document.getElementById('prof').textContent = data.prof;
+      document.getElementById('hp').textContent = data.hp;
+      document.getElementById('ac').textContent = data.ac;
+      document.getElementById('ac2').textContent = data.ac;
+      document.getElementById('speed').textContent = data.speed;
+
+      // abilities
+      for(const k of ['str','dex','con','int','wis','cha']){
+        document.getElementById(k).textContent = data.abilities[k];
+        const m = modFor(data.abilities[k]);
+        document.getElementById(k+'Mod').textContent = (m>=0?'+':'')+m;
+      }
+
+   
+      document.getElementById('saveDex').textContent = (data.abilities.dex>=10?'+':'') + (modFor(data.abilities.dex)+data.prof);
+      document.getElementById('saveWis').textContent = (modFor(data.abilities.wis)+data.prof>=0?'+':'') + (modFor(data.abilities.wis)+data.prof);
+
+      const baseToHit = modFor(data.abilities.dex) + data.prof; // 4 + 2 = 6
+      const archeryBonus = 2;
+      const fstyle = document.getElementById('fstyle').value;
+      const longToHit = baseToHit + (fstyle==='archery'?archeryBonus:0);
+      document.getElementById('longToHit').textContent = (longToHit>=0?'+':'')+longToHit;
+      document.getElementById('shortToHit').textContent = (baseToHit>=0?'+':'')+baseToHit;
+
+    
+      document.getElementById('longDmg').textContent = '1d8 + ' + modFor(data.abilities.dex);
+      document.getElementById('shortDmg').textContent = '1d6 + ' + modFor(data.abilities.dex);
+      document.getElementById('cureBonus').textContent = modFor(data.abilities.wis);
+
+
+      const spellDC = 8 + data.prof + modFor(data.abilities.wis);
+      const spellAtk = data.prof + modFor(data.abilities.wis);
+      document.getElementById('spellDC').textContent = spellDC;
+      document.getElementById('spellAtk').textContent = spellAtk>=0? '+'+spellAtk:spellAtk;
+      document.getElementById('computedDC').textContent = spellDC;
+      document.getElementById('computedAtk').textContent = (spellAtk>=0?'+':'')+spellAtk;
+
+      // fstyle name
+      document.getElementById('fstyleName').textContent = (fstyle==='archery')? 'Archery (+2 to ranged attack rolls)' : 'Two-Weapon Fighting (add DEX to off-hand damage)';
+    }
+
+    // editable abilities: double click to edit
+    for(const k of ['str','dex','con','int','wis','cha']){
+      const el = document.getElementById(k);
+      el.addEventListener('dblclick', ()=>{
+        const val = prompt('Enter new score for '+k.toUpperCase(), data.abilities[k]);
+        const n = parseInt(val);
+        if(!Number.isNaN(n) && n>=1 && n<=30){ data.abilities[k]=n; show(); }
+      });
+   
+      let pressTimer;
+      el.addEventListener('touchstart', ()=>{ pressTimer = setTimeout(()=>{ const val = prompt('Enter new score for '+k.toUpperCase(), data.abilities[k]); const n=parseInt(val); if(!Number.isNaN(n)){ data.abilities[k]=n; show(); } },800); });
+      el.addEventListener('touchend', ()=>{ clearTimeout(pressTimer); });
+    }
+
+    document.getElementById('fstyle').addEventListener('change', ()=>{ show(); });
+    document.getElementById('usePlanar').addEventListener('click', ()=>{
+      alert('Planar Warrior used: your next attack deals +1d8 force damage and counts as force (ignores resistance).');
+    });
+
+    document.getElementById('printBtn').addEventListener('click', ()=>{ window.print(); });
+
+    document.getElementById('downloadJSON').addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'aarakocra_ranger_l3.json'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    
+    show();
+  </script>
+</body>
+</html>
